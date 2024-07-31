@@ -19,13 +19,20 @@ export const handler = async (event) => {
     }
     const date = String(current_time.getFullYear()) + month + String(current_time.getDate());
     
+    // 何が起きたのかを what に格納する
+    const body = event.body;
+    let what = "馬鹿みたいなエンドポイントだないつも";
+    if (body) {
+        what = body.what;
+    }
+    
     // 各パラメータをセット
     const params = {
         TableName: 'danger',
         Item: {
             number: event.number || 1, 
             date: current_time.getTime(),
-            what: event.what || "安倍晋三ウンチ",
+            what: what,
             timestamp: Number(date), // タイムスタンプを追加
         },
         // ConditionExpression: 'attribute_not_exists(timestamp)', // number属性が存在しない場合にのみ書き込み
