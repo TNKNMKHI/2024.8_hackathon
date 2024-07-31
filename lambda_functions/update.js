@@ -24,11 +24,11 @@ export const handler = async (event) => {
         TableName: 'danger',
         Item: {
             number: event.number || 1, 
-            date: Number(date),
+            date: current_time.getTime(),
             what: event.what || "安倍晋三ウンチ",
-            timestamp: current_time.getTime(), // タイムスタンプを追加
+            timestamp: Number(date), // タイムスタンプを追加
         },
-        ConditionExpression: 'attribute_not_exists(timestamp)', // number属性が存在しない場合にのみ書き込み
+        // ConditionExpression: 'attribute_not_exists(timestamp)', // number属性が存在しない場合にのみ書き込み
     };
 
     // パラメータをdynamoDBに送信
@@ -37,13 +37,13 @@ export const handler = async (event) => {
         await docClient.send(command);
         return {
             statusCode: 200,
-            body: 'success',
+            body: 'successed',
         };
     } catch (err) {
         return {
             statusCode: 500,
             body: JSON.stringify({
-                message: 'some error happened',
+                message: 'something is wrong',
             }),
         };
     }
