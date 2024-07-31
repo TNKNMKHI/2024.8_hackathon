@@ -2,19 +2,23 @@ const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
 const { DynamoDBDocumentClient, PutCommand } = require('@aws-sdk/lib-dynamodb');
 
 const dynamodbClient = new DynamoDBClient({
-    region: 'ap-northeast-1',
+    region: 'us-east-1',
 });
 
-// ここで、↑で初期化したDynamoDBClientを用いてDynamoDBDocumentClientを初期化
+
 const docClient = DynamoDBDocumentClient.from(dynamodbClient);
 
-exports.lambdaHandler = async (event) => {
+export const handler = async (event) => {
+    // レスポンスデータの作成
+    const current_time = new Date();
+    const date = current_time.getFullYear() + (current_time.getMonth() + 1) + current_time.getDate();
+
     const params = {
         TableName: 'danger',
         Item: {
-            number: 11, // ここが違う！
-            date: 4, // ここが違う！
-            what: 20, // ここが違う！
+            number: 1, 
+            date: date, 
+            what: 20, 
         },
     };
     const command = new PutCommand(params);
@@ -33,3 +37,5 @@ exports.lambdaHandler = async (event) => {
         };
     }
 };
+
+function 
