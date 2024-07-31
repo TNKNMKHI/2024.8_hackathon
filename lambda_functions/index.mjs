@@ -11,14 +11,21 @@ const docClient = DynamoDBDocumentClient.from(dynamodbClient);
 export const handler = async (event) => {
     // レスポンスデータの作成
     const current_time = new Date();
-    const date = String(current_time.getFullYear() + (current_time.getMonth() + 1) + current_time.getDate());
+    let month = current_time.getMonth() + 1;
+    if (month < 10) {
+      month = "0" + String(month);
+    } else {
+      month = String(month);
+    }
+
+    const date = String(current_time.getFullYear()) + month + String(current_time.getDate());
 
     const params = {
         TableName: 'danger',
         Item: {
             number: 1, 
             date: Number(date), 
-            what: 20, 
+            what: "安倍晋三ウンチ", 
         },
     };
     const command = new PutCommand(params);
