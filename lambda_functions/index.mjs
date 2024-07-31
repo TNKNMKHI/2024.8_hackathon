@@ -1,4 +1,4 @@
-export const handler = async (event) => {
+export const handler = async (event,callback) => {
   const res = {
     "statusCode" : 200,
     "headers": {
@@ -6,5 +6,5 @@ export const handler = async (event) => {
     }
   };
   res.body = event.greeter;
-  return res;
+  callback(null, res);
 };
