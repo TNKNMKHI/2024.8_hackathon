@@ -1,3 +1,7 @@
 export const handler = async (event) => {
-  return JSON.stringify(event.body);
+  const response = event.body;
+  return {
+    status : 300,
+    body : JSON.stringify(response)
+  };
 };
