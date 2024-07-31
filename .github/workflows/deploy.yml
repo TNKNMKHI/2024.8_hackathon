@@ -1,36 +1,46 @@
-name: lambda
+name: Deploy to AWS Lambda
 on:
   push:
     branches:
-      - master
+      - main
+    workflow_dispatch:
+
+env:
+  NODE_VERSION: '14.x'
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      contents: read
-
+    
     steps:
-      - name: checkout
+      - name: Checkout
         uses: actions/checkout@v3
-
-      - name: configure-aws-credentials
-        uses: aws-actions/configure-aws-credentials@master
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: npm install, build, and test
+        run: |
+          npm install
+          npm run build --if-present
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v3
+        with:
+          name: node-app
+          path: .
+        
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           role-session-name: GitHubActions
 
-      - name: get-caller-identity is allowed to run on role.
-        run: aws sts get-caller-identity
-
-      - name: setup-python
-        uses: actions/setup-python@v3
-        with:
-          python-version: '3.x'
-
       - name: lambda update
-        run: |
-          pip3 install awscli
-          cd src && zip -r package.zip ./*
-          aws lambda update-function-code --function-name lambda_github_action_test --zip-file fileb://package.zip --publish
+        run: 
