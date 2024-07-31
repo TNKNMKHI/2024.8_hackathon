@@ -16,7 +16,7 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
-      - run: zip -j lambda1.zip ./lambda1/index.js
+      - run: zip -j lambda1.zip ./src/lambda1/index.js
       - run: aws lambda update-function-code --function-name=lambda1 --zip-file=fileb://lambda1.zip
  
   lambda2:
@@ -31,5 +31,5 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
-      - run: zip -j lambda2.zip ./lambda2/index.js
+      - run: zip -j lambda2.zip ./src/lambda2/index.js
       - run: aws lambda update-function-code --function-name=lambda1  --zip-file=fileb://lambda1.zip
