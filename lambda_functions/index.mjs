@@ -1,5 +1,5 @@
 export const handler = async (event,callback) => {
-  const res = {
+  let res = {
     "statusCode" : 200,
     "headers": {
       "Content-Type": "*/*"
