@@ -22,10 +22,10 @@ jobs:
       - run: |
             cd ${{matrix.lambda}}
             cp update.js index.mjs
-            zip  -r ../update.zip index.mjs
+            zip  -r update.zip index.mjs
             rm index.mjs
             cp get_status.js index.mjs
-            zip -r ../get_status.zip index.mjs
+            zip -r get_status.zip index.mjs
             rm index.mjs
             aws lambda update-function-code --function-name update --zip-file fileb://update.zip --publish
             aws lambda update-function-code --function-name get_status --zip-file fileb://update.zip --publish
