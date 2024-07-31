@@ -20,7 +20,7 @@ export const handler = async (event) => {
     const date = String(current_time.getFullYear()) + month + String(current_time.getDate());
     
     // 何が起きたのかを what に格納する
-    const body = event.body;
+    const body = event.queryStringParameters;
     let what = "馬鹿みたいなエンドポイントだないつも";
     if (body) {
         what = body.what;
