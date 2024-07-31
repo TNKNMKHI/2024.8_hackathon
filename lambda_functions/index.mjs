@@ -17,7 +17,7 @@ export const handler = async (event) => {
         TableName: 'danger',
         Item: {
             number: 1, 
-            date: date, 
+            date: Int(date), 
             what: 20, 
         },
     };
