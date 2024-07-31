@@ -1,21 +1,20 @@
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, PutCommand, PutCommandInput } from '@aws-sdk/lib-dynamodb';
-import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
+const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
+const { DynamoDBDocumentClient, PutCommand } = require('@aws-sdk/lib-dynamodb');
 
 const dynamodbClient = new DynamoDBClient({
-    region: 'us-east-1',
+    region: 'ap-northeast-1',
 });
 
 // ここで、↑で初期化したDynamoDBClientを用いてDynamoDBDocumentClientを初期化
 const docClient = DynamoDBDocumentClient.from(dynamodbClient);
 
-export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    const params: PutCommandInput = {
+exports.lambdaHandler = async (event) => {
+    const params = {
         TableName: 'danger',
         Item: {
-            number: 1, // ここが違う！
-            date: 1, // ここが違う！
-            what: 8, // ここが違う！
+            number: 11, // ここが違う！
+            date: 4, // ここが違う！
+            what: 20, // ここが違う！
         },
     };
     const command = new PutCommand(params);
