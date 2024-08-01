@@ -35,11 +35,19 @@ export const handler = async (event) => {
     }
   });
 
-  // レスポンスを返却 
-  const response = await client.send(command);
-  response.Items.forEach(function (pie) {
-    console.log(`${pie.Flavor.S} - ${pie.Description.S}\n`);
-  });
-  return response;
+  // レスポンスを返却
+  try {
+    const response = await docClient.send(command);
+    console.log(response);
+    return response;
+
+  } catch (err) {
+    return {
+        statusCode: 500,
+        body: JSON.stringify({
+            message: 'something is wrong',
+        }),
+    };
+}
 };
 
