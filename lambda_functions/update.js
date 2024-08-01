@@ -12,12 +12,19 @@ export const handler = async (event) => {
     // yyyymmddの型で date を管理する
     const current_time = new Date();
     let month = current_time.getMonth() + 1;
+    let day = current_time.getDate();
     if (month < 10) {
       month = "0" + String(month);
     } else {
       month = String(month);
     }
-    const date = String(current_time.getFullYear()) + month + String(current_time.getDate());
+    if (day < 10) {
+        day = "0" + String(day);
+      } else {
+        day = String(day);
+      }
+
+    const date = String(current_time.getFullYear()) + month + day;
     
     // 何が起きたのかを what に格納する
     const body = event.queryStringParameters;
