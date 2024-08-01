@@ -30,10 +30,9 @@ export const handler = async (event) => {
         "#hn": "date"
     },
     ExpressionAttributeValues: {
-        "val1": date
+        ":val1": date
     }
-
-  });
+});
 
   const response = await docClient.send(command);
   console.log(response);
