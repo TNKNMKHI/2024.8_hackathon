@@ -28,4 +28,4 @@ jobs:
             zip -r get_status.zip index.mjs
             rm index.mjs
             aws lambda update-function-code --function-name update --zip-file fileb://update.zip --publish
-            aws lambda update-function-code --function-name get_status --zip-file fileb://update.zip --publish
+            aws lambda update-function-code --function-name get_status --zip-file fileb://get_status.zip --publish
