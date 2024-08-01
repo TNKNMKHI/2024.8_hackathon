@@ -24,19 +24,20 @@ export const handler = async (event) => {
   const date = Number(String(current_time.getFullYear()) + month + day);
 
   // dynamoDBにquaryを実行して本日分のデータを取得する
-  const command = new QueryCommand({
-    TableName: "danger",
-    KeyConditionExpression: "#hn = :val1",
-    ExpressionAttributeNames:{
-        "#hn": "date"
-    },
-    ExpressionAttributeValues: {
-        ":val1": date
-    }
-  });
-
-  // レスポンスを返却
   try {
+    const command = new QueryCommand({
+      TableName: "danger",
+      KeyConditionExpression: "#hn = :val1",
+      ExpressionAttributeNames:{
+          "#hn": "date"
+      },
+      ExpressionAttributeValues: {
+          ":val1": date
+      }
+    });
+
+    // 検索をかけて返却
+  
     const response = await docClient.send(command);
     console.log(response);
     return response;
