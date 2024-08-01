@@ -6,7 +6,7 @@ const docClient = DynamoDBDocumentClient.from(client);
 
 export const handler = async (event) => {
 
-  // 本日の日付をyyyymmddで取得
+  // 日付をyyyymmddで取得
   const current_time = new Date();
   let month = current_time.getMonth() + 1;
   let day = current_time.getDate();
@@ -21,8 +21,9 @@ export const handler = async (event) => {
       day = String(day);
     }
 
-  const date = String(current_time.getFullYear()) + month + day;
+  const date = Number(String(current_time.getFullYear()) + month + day);
 
+  // dynamoDBにquaryを実行して本日分のデータを取得する
   const command = new QueryCommand({
     TableName: "danger",
     KeyConditionExpression: "#hn = :val1",
@@ -32,10 +33,13 @@ export const handler = async (event) => {
     ExpressionAttributeValues: {
         ":val1": date
     }
-});
+  });
 
-  const response = await docClient.send(command);
-  console.log(response);
+  // レスポンスを返却 
+  const response = await client.send(command);
+  response.Items.forEach(function (pie) {
+    console.log(`${pie.Flavor.S} - ${pie.Description.S}\n`);
+  });
   return response;
 };
 
