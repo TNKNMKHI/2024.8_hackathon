@@ -4,7 +4,7 @@ import { QueryCommand, DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 const client = new DynamoDBClient({});
 const docClient = DynamoDBDocumentClient.from(client);
 
-export const main = async () => {
+export const handler = async (event) => {
 
   // 本日の日付をyyyymmddで取得
   const current_time = new Date();
