@@ -25,12 +25,12 @@ export const main = async () => {
 
   const command = new QueryCommand({
     TableName: "danger",
-    KeyConditionExpression: "#hn = :val1 ",
+    KeyConditionExpression: "#hn = :val1",
     ExpressionAttributeNames:{
         "#hn": "date"
     },
     ExpressionAttributeValues: {
-        ":val1":date
+        "val1": date
     }
 
   });
