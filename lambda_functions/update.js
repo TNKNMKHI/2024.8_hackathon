@@ -37,8 +37,8 @@ export const handler = async (event) => {
     const params = {
         TableName: 'danger',
         Item: {
-            date: current_time.getTime(),
-            timestamp: Number(date),
+            date: Number(date),
+            timestamp: current_time.getTime(),
             what: what,
         },
         // ConditionExpression: 'attribute_not_exists(timestamp)', // number属性が存在しない場合にのみ書き込み

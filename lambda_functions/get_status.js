@@ -1,14 +1,17 @@
-import { DynamoDBClient }  from '@aws-sdk/client-dynamodb';
-// import { DynamoDBDocumentClient, GetCommand } from '@aws-sdk/lib-dynamodb';
-
-import { ListTablesCommand, DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { QueryCommand, DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 
 const client = new DynamoDBClient({});
+const docClient = DynamoDBDocumentClient.from(client);
 
 export const main = async () => {
-  const command = new ListTablesCommand({});
+  const command = new QueryCommand({
+    TableName: "danger",
+    
+  });
 
-  const response = await client.send(command);
+  const response = await docClient.send(command);
   console.log(response);
   return response;
 };
+
