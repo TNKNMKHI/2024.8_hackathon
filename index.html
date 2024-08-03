@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON データ表示</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .container {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>API データ表示</h1>
+<div id="data-container" class="container">
+    データを読み込んでいます...
+</div>
+
+<script>
+    async function fetchData() {
+        const response = await fetch('https://6184wn0uh1.execute-api.us-east-1.amazonaws.com/get_status');
+        const data = await response.json();
+        
+        const container = document.getElementById('data-container');
+        container.innerHTML = `
+            <h2>検出結果:</h2>
+            <p><strong>状況:</strong> ${data.Items[0].what}</p>
+            <p><strong>日付:</strong> ${data.Items[0].date}</p>
+            <p><strong>タイムスタンプ:</strong> ${data.Items[0].timestamp}</p>
+        `;
+    }
+
+    fetchData().catch(error => {
+        const container = document.getElementById('data-container');
+        container.innerHTML = '<p>データの取得に失敗しました。</p>';
+        console.error('Error fetching data:', error);
+    });
+</script>
+
+</body>
+</html>
