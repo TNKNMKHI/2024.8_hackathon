@@ -26,12 +26,9 @@ export const handler = async (event) => {
 
     const date = String(current_time.getFullYear()) + month + day;
     
-    // 何が起きたのかを what に格納する
+    // 飛んできたデータをそのままアイテムに格納
     const body = event.queryStringParameters;
-    let what = "馬鹿みたいなエンドポイントだないつも";
-    if (body) {
-        what = body.what;
-    }
+
     
     // 各パラメータをセット
     const params = {
@@ -39,7 +36,7 @@ export const handler = async (event) => {
         Item: {
             date: Number(date),
             timestamp: current_time.getTime(),
-            what: what,
+            what: body,
         },
         // ConditionExpression: 'attribute_not_exists(timestamp)', // number属性が存在しない場合にのみ書き込み
     };
