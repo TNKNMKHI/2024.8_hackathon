@@ -1,4 +1,4 @@
-import { DynamoDBClient }  from '@aws-sdk/client-dynamodb';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb';
 
 const dynamodbClient = new DynamoDBClient({
@@ -8,40 +8,39 @@ const dynamodbClient = new DynamoDBClient({
 const docClient = DynamoDBDocumentClient.from(dynamodbClient);
 
 export const handler = async (event) => {
-    // レスポンスデータの作成
-    // yyyymmddの型で date を管理する
+    // Get the current date in yyyymmdd format
     const current_time = new Date();
-    let month = current_time.getMonth() + 1;
-    let day = current_time.getDate();
-    if (month < 10) {
-      month = "0" + String(month);
-    } else {
-      month = String(month);
-    }
-    if (day < 10) {
-        day = "0" + String(day);
-      } else {
-        day = String(day);
-      }
-
-    const date = String(current_time.getFullYear()) + month + day;
+    const month = current_time.getMonth() + 1;
+    const day = current_time.getDate();
+    const date = `${current_time.getFullYear()}${month < 10 ? '0' : ''}${month}${day < 10 ? '0' : ''}${day}`;
     
-    // 飛んできたデータをそのままアイテムに格納
+    // Parse the incoming data
     const body = event.queryStringParameters;
 
-    
-    // 各パラメータをセット
-    const params = {
-        TableName: 'danger',
-        Item: {
-            date: Number(date),
-            timestamp: current_time.getTime(),
-            what: body,
-        },
-        // ConditionExpression: 'attribute_not_exists(timestamp)', // number属性が存在しない場合にのみ書き込み
+    // Ensure the body contains data
+    if (!body || Object.keys(body).length === 0) {
+        return {
+            statusCode: 400,
+            body: JSON.stringify({
+                message: 'Invalid request, no data provided',
+            }),
+        };
+    }
+
+    // Prepare the item to be inserted into the DynamoDB table
+    const item = {
+        date: Number(date),
+        timestamp: current_time.getTime(),
+        ...body
     };
 
-    // パラメータをdynamoDBに送信
+    const params = {
+        TableName: 'danger',
+        Item: item,
+        // ConditionExpression: 'attribute_not_exists(timestamp)', // Uncomment if you want to avoid overwriting existing items
+    };
+
+    // Send the item to DynamoDB
     const command = new PutCommand(params);
     try {
         await docClient.send(command);
@@ -54,6 +53,7 @@ export const handler = async (event) => {
             statusCode: 500,
             body: JSON.stringify({
                 message: 'something is wrong',
+                error: err.message,
             }),
         };
     }
